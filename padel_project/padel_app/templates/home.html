@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="text-center mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            🎾 Bienvenido a Padel App
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300">
+            Sistema de planificación y emparejamiento de pádel
+        </p>
+    </div>
+
+    {% if user.is_authenticated %}
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                Hola, {{ user.nombre }}!
+            </h2>
+            
+            {% if user.rol == 'Alumno_Usuario' %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                            Acciones Rápidas
+                        </h3>
+                        <div class="space-y-2">
+                            <a href="{% url 'lista_espera' %}" class="block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-center">
+                                Ver mi lista de espera
+                            </a>
+                            <a href="{% url 'agregar_espera' %}" class="block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 text-center">
+                                Agregar a lista de espera
+                            </a>
+                            <a href="{% url 'perfil' %}" class="block bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 text-center">
+                                Editar mi perfil
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-50 dark:bg-green-900 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-green-900 dark:text-green-100 mb-2">
+                            Información del Usuario
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Rol:</strong> {{ user.rol }}</p>
+                            <p><strong>Nivel:</strong> {{ user.nivel_categoria }}/9</p>
+                            <p><strong>Juega:</strong> {{ user.jugador_de }}</p>
+                            <p><strong>Mano:</strong> {{ user.get_mano_habil_display }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+            {% elif user.rol == 'Profesor_Admin' %}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-purple-50 dark:bg-purple-900 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-purple-900 dark:text-purple-100 mb-2">
+                            Gestión de Emparejamientos
+                        </h3>
+                        <p class="text-purple-700 dark:text-purple-300 mb-4">
+                            Gestiona las solicitudes de los alumnos y crea emparejamientos.
+                        </p>
+                        <a href="{% url 'emparejamiento' %}" class="inline-block bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                            Ir a Emparejamiento
+                        </a>
+                    </div>
+                    
+                    <div class="bg-orange-50 dark:bg-orange-900 p-4 rounded-lg">
+                        <h3 class="text-lg font-semibold text-orange-900 dark:text-orange-100 mb-2">
+                            Información del Profesor
+                        </h3>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Rol:</strong> {{ user.rol }}</p>
+                            <p><strong>Nivel:</strong> {{ user.nivel_categoria }}/9</p>
+                            <p><strong>Contacto:</strong> {{ user.celular }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
+                Inicia sesión para acceder al sistema
+            </h2>
+            <a href="{% url 'login' %}" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700">
+                Iniciar Sesión
+            </a>
+            
+            <div class="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                <h3 class="font-semibold mb-2">Usuarios de prueba:</h3>
+                <p><strong>Profesor:</strong> usuario "profesor", contraseña "pass123"</p>
+                <p><strong>Alumno:</strong> usuario "alumno", contraseña "pass123"</p>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

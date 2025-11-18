@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Emparejamiento - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Gestión de Emparejamiento</h1>
+    
+    {% if espera_agrupada %}
+        {% for key, grupo in espera_agrupada.items %}
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 mb-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
+                    {{ grupo.0.fecha }} - {{ grupo.0.hora }} 
+                    <span class="text-lg font-normal text-gray-600 dark:text-gray-400">
+                        en {{ grupo.0.id_club.nombre_club }}
+                    </span>
+                </h2>
+                <span class="bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm">
+                    {{ grupo|length }} jugador(es)
+                </span>
+            </div>
+            
+            <form method="post" action="{% url 'crear_emparejamiento' %}">
+                {% csrf_token %}
+                <input type="hidden" name="fecha" value="{{ grupo.0.fecha|date:'Y-m-d' }}">
+                <input type="hidden" name="hora" value="{{ grupo.0.hora }}">
+                <input type="hidden" name="club_id" value="{{ grupo.0.id_club.id }}">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    {% for espera in grupo %}
+                    <div class="border dark:border-gray-600 rounded-lg p-4">
+                        <label class="flex items-center space-x-3">
+                            <input type="checkbox" name="jugadores" value="{{ espera.id_usuario.id }}" 
+                                   class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <div>
+                                <p class="font-medium text-gray-900 dark:text-white">{{ espera.id_usuario.nombre }} {{ espera.id_usuario.apellido }}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Nivel: {{ espera.id_usuario.nivel_categoria }} | 
+                                    {{ espera.id_usuario.jugador_de }}
+                                </p>
+                                {% if espera.descripcion %}
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ espera.descripcion }}</p>
+                                {% endif %}
+                            </div>
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="valor_ar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Valor por alumno (AR$)
+                            </label>
+                            <input type="number" name="valor_ar" id="valor_ar" required 
+                                   step="0.01" min="0"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
+                                   value="{{ grupo.0.id_club.valor_hora_ar }}">
+                        </div>
+                        
+                        <div>
+                            <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Descripción (opcional)
+                            </label>
+                            <input type="text" name="descripcion" id="descripcion"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:text-white"
+                                   placeholder="Clase grupal...">
+                        </div>
+                    </div>
+                    
+                    <button type="submit" 
+                            class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                            onclick="return validateSelection(this)">
+                        Crear Emparejamiento
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6 text-center">
+        <p class="text-gray-600 dark:text-gray-300">No hay solicitudes en lista de espera para emparejar.</p>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function validateSelection(button) {
+    const checkboxes = document.querySelectorAll('input[name="jugadores"]:checked');
+    if (checkboxes.length < 2) {
+        alert('Debes seleccionar al menos 2 jugadores para crear un emparejamiento.');
+        return false;
+    }
+    if (checkboxes.length > 4) {
+        alert('Solo puedes seleccionar máximo 4 jugadores por emparejamiento.');
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}

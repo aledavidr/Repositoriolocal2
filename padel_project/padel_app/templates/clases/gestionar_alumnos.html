@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Gestionar Alumnos - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            Gestionar Alumnos - Clase del {{ clase.fecha }} a las {{ clase.hora }}
+        </h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Alumnos Actuales -->
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Alumnos en la Clase</h2>
+                
+                {% if alumnos_actuales %}
+                <div class="space-y-3">
+                    {% for alumno in alumnos_actuales %}
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ alumno.nombre }} {{ alumno.apellido }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Nivel {{ alumno.nivel_categoria }}</p>
+                        </div>
+                        <form method="post" action="{% url 'quitar_alumno_clase' clase.id %}" class="inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="alumno_id" value="{{ alumno.id }}">
+                            <button type="submit" class="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                ❌ Quitar
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No hay alumnos en esta clase.</p>
+                {% endif %}
+            </div>
+            
+            <!-- Alumnos en Espera -->
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Alumnos en Espera Disponibles</h2>
+                
+                {% if alumnos_en_espera %}
+                <div class="space-y-3">
+                    {% for espera in alumnos_en_espera %}
+                    <div class="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">{{ espera.id_usuario.nombre }} {{ espera.id_usuario.apellido }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Nivel {{ espera.id_usuario.nivel_categoria }} | 
+                                Club: {{ espera.id_club.nombre_club }}
+                            </p>
+                        </div>
+                        <form method="post" action="{% url 'agregar_alumno_clase' clase.id %}" class="inline">
+                            {% csrf_token %}
+                            <input type="hidden" name="alumno_id" value="{{ espera.id_usuario.id }}">
+                            <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 text-sm">
+                                ➕ Agregar
+                            </button>
+                        </form>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">
+                    No hay alumnos en espera para esta fecha y hora.
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center">
+            <a href="{% url 'lista_clases' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                ← Volver a Clases
+            </a>
+            
+            {% if alumnos_actuales %}
+            <form method="post" action="{% url 'confirmar_clase' clase.id %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                    ✅ Confirmar Clase y Notificar
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancelar Solicitud - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Cancelar Solicitud</h1>
+        
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+            ¿Estás seguro de que quieres cancelar esta solicitud? Se enviará una notificación al alumno.
+        </p>
+        
+        <div class="bg-red-50 dark:bg-red-900 border border-red-200 dark:border-red-700 rounded-lg p-4 mb-6">
+            <p><strong>Alumno:</strong> {{ object.id_usuario.nombre }} {{ object.id_usuario.apellido }}</p>
+            <p><strong>Club:</strong> {{ object.id_club.nombre_club }}</p>
+            <p><strong>Fecha:</strong> {{ object.fecha }}</p>
+            <p><strong>Hora:</strong> {{ object.hora }}</p>
+        </div>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="flex justify-end space-x-3">
+                <a href="{% url 'gestion_espera' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    Volver
+                </a>
+                <button type="submit" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                    Sí, Cancelar y Notificar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

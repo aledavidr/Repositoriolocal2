@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Agregar a Lista de Espera - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Agregar a Lista de Espera</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="space-y-4">
+                <div>
+                    <label for="id_club" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Club</label>
+                    <select name="id_club" id="id_club" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                        <option value="">Seleccionar club...</option>
+                        {% for club in clubes %}
+                        <option value="{{ club.id }}">{{ club.nombre_club }} - ${{ club.valor_hora_ar }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div>
+                    <label for="fecha" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Fecha</label>
+                    <input type="date" name="fecha" id="fecha" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                
+                <div>
+                    <label for="hora" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hora</label>
+                    <input type="time" name="hora" id="hora" required 
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                </div>
+                
+                <div>
+                    <label for="descripcion" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Notas (opcional)</label>
+                    <textarea name="descripcion" id="descripcion" rows="3" 
+                              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                              placeholder="Alguna nota especial..."></textarea>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end space-x-3">
+                <a href="{% url 'lista_espera' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                    Cancelar
+                </a>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                    Agregar a Lista
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

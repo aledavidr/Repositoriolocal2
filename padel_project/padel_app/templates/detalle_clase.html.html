@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Clase - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Detalle de Clase</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Información de la Clase</h2>
+                <div class="space-y-3">
+                    <p><strong>Fecha:</strong> {{ clase.fecha }}</p>
+                    <p><strong>Hora:</strong> {{ clase.hora }}</p>
+                    <p><strong>Profesor:</strong> {{ clase.id_profesor.nombre }}</p>
+                    <p><strong>Valor:</strong> ${{ clase.valor_ar }}</p>
+                    <p><strong>Estado:</strong> 
+                        {% if clase.confirmado %}
+                            <span class="text-green-600">✅ Confirmada</span>
+                        {% else %}
+                            <span class="text-yellow-600">⏳ Pendiente de confirmación</span>
+                        {% endif %}
+                    </p>
+                    {% if clase.entrenamiento %}
+                        <p><strong>Entrenamiento:</strong> {{ clase.entrenamiento.nombre }}</p>
+                        <p><strong>Tipo:</strong> {{ clase.entrenamiento.get_tipo_entreno_display }}</p>
+                    {% endif %}
+                    {% if clase.descripcion %}
+                        <p><strong>Descripción:</strong> {{ clase.descripcion }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Jugadores</h2>
+                {% if emparejamiento and emparejamiento.jugadores.all %}
+                    <ul class="space-y-2">
+                        {% for jugador in emparejamiento.jugadores.all %}
+                        <li class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded">
+                            <span>{{ jugador.nombre }} {{ jugador.apellido }}</span>
+                            <span class="text-sm text-gray-500">Nivel {{ jugador.nivel_categoria }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-gray-500">No hay jugadores asignados.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Historial de Notificaciones</h2>
+            {% if notificaciones %}
+                <div class="space-y-3">
+                    {% for notificacion in notificaciones %}
+                    <div class="p-3 border rounded-lg {% if notificacion.enviada %}bg-green-50 border-green-200 dark:bg-green-900 dark:border-green-700{% else %}bg-yellow-50 border-yellow-200 dark:bg-yellow-900 dark:border-yellow-700{% endif %}">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="font-medium">{{ notificacion.id_usuario.nombre }}</p>
+                                <p class="text-sm">{{ notificacion.get_tipo_evento_display }}</p>
+                            </div>
+                            <div class="text-right">
+                                {% if notificacion.enviada %}
+                                    <span class="text-green-600">✅ Enviada</span>
+                                    <p class="text-xs text-gray-500">{{ notificacion.fecha_envio|date:"d/m H:i" }}</p>
+                                {% else %}
+                                    <span class="text-yellow-600">⏳ Pendiente</span>
+                                    <p class="text-xs text-gray-500">Creada: {{ notificacion.fecha_creacion|date:"d/m H:i" }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-gray-500">No hay notificaciones registradas.</p>
+            {% endif %}
+        </div>
+
+        <div class="flex justify-end space-x-3">
+            <a href="{% url 'gestion_espera' %}" class="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700">
+                Volver a Gestión
+            </a>
+            {% if not clase.confirmado %}
+                <form method="post" action="{% url 'confirmar_clase' clase.id %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                        Confirmar Clase
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión - Padel App{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+                Iniciar Sesión
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                Padel App - Sistema de emparejamiento
+            </p>
+        </div>
+        <form class="mt-8 space-y-6" method="post">
+            {% csrf_token %}
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="username" class="sr-only">Usuario</label>
+                    <input id="username" name="username" type="text" required 
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm dark:bg-gray-700"
+                           placeholder="Usuario">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Contraseña</label>
+                    <input id="password" name="password" type="password" required 
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm dark:bg-gray-700"
+                           placeholder="Contraseña">
+                </div>
+            </div>
+
+            {% if form.errors %}
+            <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
+                <p>Usuario o contraseña incorrectos. Por favor, intenta nuevamente.</p>
+            </div>
+            {% endif %}
+
+            <div>
+                <button type="submit" 
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Iniciar Sesión
+                </button>
+            </div>
+        </form>
+        
+        <div class="text-center bg-gray-100 dark:bg-gray-800 p-4 rounded-lg">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                <strong>Usuarios de prueba:</strong><br>
+                <strong>Profesor:</strong> usuario "profesor", contraseña "pass123"<br>
+                <strong>Alumno:</strong> usuario "alumno", contraseña "pass123"
+            </p>
+         <div class="text-center">
+            <a href="{% url 'registro' %}" class="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                ¿No tienes cuenta? Regístrate aquí
+            </a>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{% url 'password_reset' %}" class="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                ¿Olvidaste tu contraseña?
+            </a>
+        </div>
+    
+        </div>
+    </div>
+</div>
+{% endblock %}

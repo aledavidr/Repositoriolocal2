@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block title %}Registro - Padel App{% endblock %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">
+                Registrarse como Alumno
+            </h2>
+            <p class="mt-2 text-center text-sm text-gray-600 dark:text-gray-400">
+                Crea tu cuenta para unirte a las clases de pádel
+            </p>
+        </div>
+        
+        <form class="mt-8 space-y-6" method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 px-4 py-3 rounded">
+                <p>Por favor, corrige los errores below.</p>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <p class="text-sm">{{ error }}</p>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="space-y-4">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Usuario *</label>
+                    <input id="username" name="username" type="text" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="Elige un nombre de usuario">
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Contraseña *</label>
+                    <input id="password" name="password" type="password" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="Crea una contraseña segura">
+                </div>
+
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nombre *</label>
+                    <input id="nombre" name="nombre" type="text" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="Tu nombre">
+                </div>
+
+                <div>
+                    <label for="apellido" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Apellido</label>
+                    <input id="apellido" name="apellido" type="text" 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="Tu apellido">
+                </div>
+
+                <div>
+                    <label for="mail" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email *</label>
+                    <input id="mail" name="mail" type="email" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="tu@email.com">
+                </div>
+
+                <div>
+                    <label for="celular" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Celular *</label>
+                    <input id="celular" name="celular" type="text" required 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="+5491122334455">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="jugador_de" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Juega con</label>
+                        <select id="jugador_de" name="jugador_de" 
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                            <option value="Drive">Drive</option>
+                            <option value="Revés">Revés</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="mano_habil" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mano hábil</label>
+                        <select id="mano_habil" name="mano_habil" 
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                            <option value="D">Diestro</option>
+                            <option value="Z">Zurdo</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="direccion" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dirección</label>
+                    <input id="direccion" name="direccion" type="text" 
+                           class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                           placeholder="Tu dirección">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="localidad" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Localidad</label>
+                        <input id="localidad" name="localidad" type="text" 
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                               placeholder="Localidad">
+                    </div>
+                    
+                    <div>
+                        <label for="provincia" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Provincia</label>
+                        <input id="provincia" name="provincia" type="text" 
+                               class="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                               placeholder="Provincia">
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Registrarse
+                </button>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
+                    ¿Ya tienes cuenta? Inicia sesión aquí
+                </a>
+                
+            </div>
+            
+        </form>
+    </div>
+    
+</div>
+{% endblock %}

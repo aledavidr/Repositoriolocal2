@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Mi Perfil</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Información Personal</h2>
+                <div class="space-y-3">
+                    <p><strong>Nombre:</strong> {{ user.nombre }} {{ user.apellido }}</p>
+                    <p><strong>Usuario:</strong> {{ user.username }}</p>
+                    <p><strong>Email:</strong> {{ user.mail }}</p>
+                    <p><strong>Celular:</strong> {{ user.celular }}</p>
+                    <p><strong>Rol:</strong> {{ user.rol }}</p>
+                    {% if user.rol == 'Alumno_Usuario' %}
+                        <p><strong>Nivel:</strong> {{ user.nivel_categoria }}/9</p>
+                        <p><strong>Juega:</strong> {{ user.jugador_de }}</p>
+                        <p><strong>Mano hábil:</strong> {{ user.get_mano_habil_display }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Dirección</h2>
+                <div class="space-y-3">
+                    <p><strong>Dirección:</strong> {{ user.direccion|default:"No especificada" }}</p>
+                    <p><strong>Localidad:</strong> {{ user.localidad|default:"No especificada" }}</p>
+                    <p><strong>Provincia:</strong> {{ user.provincia|default:"No especificada" }}</p>
+                    <p><strong>País:</strong> {{ user.pais|default:"No especificada" }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="border-t dark:border-gray-600 pt-6">
+            <a href="{% url 'editar_perfil' %}" class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Editar Perfil
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

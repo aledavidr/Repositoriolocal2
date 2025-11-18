@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Detalle de Notificación - Padel App{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Detalle de Notificación</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Información de la Notificación</h2>
+                <div class="space-y-3">
+                    <p><strong>Alumno:</strong> {{ notificacion.id_usuario.nombre }} {{ notificacion.id_usuario.apellido }}</p>
+                    <p><strong>Tipo:</strong> {{ notificacion.get_tipo_evento_display }}</p>
+                    <p><strong>Estado:</strong> 
+                        {% if notificacion.enviada %}
+                            <span class="text-green-600">✅ Enviada</span>
+                        {% else %}
+                            <span class="text-yellow-600">⏳ Pendiente</span>
+                        {% endif %}
+                    </p>
+                    <p><strong>Creación:</strong> {{ notificacion.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                    {% if notificacion.enviada %}
+                        <p><strong>Envío:</strong> {{ notificacion.fecha_envio|date:"d/m/Y H:i" }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            {% if notificacion.id_clase %}
+            <div>
+                <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Información de la Clase</h2>
+                <div class="space-y-3">
+                    <p><strong>Fecha:</strong> {{ notificacion.id_clase.fecha }}</p>
+                    <p><strong>Hora:</strong> {{ notificacion.id_clase.hora }}</p>
+                    <p><strong>Profesor:</strong> {{ notificacion.id_clase.id_profesor.nombre }}</p>
+                    <p><strong>Valor:</strong> ${{ notificacion.id_clase.valor_ar }}</p>
+                    {% if notificacion.id_clase.entrenamiento %}
+                        <p><strong>Entrenamiento:</strong> {{ notificacion.id_clase.entrenamiento.nombre }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="mt-6">
+            <a href="{% url 'gestion_espera' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Volver a Gestión
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
